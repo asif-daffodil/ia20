@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <script>
+        // Get the user agent string
+        var userAgent = navigator.userAgent;
+
+        // Initialize variables to store the browser name
+        var browserName;
+
+        // Check if the user agent string contains specific keywords to identify the browser
+        if (userAgent.includes("Chrome")) {
+            browserName = "Google Chrome";
+        } else if (userAgent.includes("Firefox")) {
+            browserName = "Mozilla Firefox";
+        } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+            browserName = "Apple Safari";
+        } else if (userAgent.includes("Edge")) {
+            browserName = "Microsoft Edge";
+        } else if (userAgent.includes("MSIE") || userAgent.includes("Trident/")) {
+            browserName = "Internet Explorer";
+        } else {
+            browserName = "Unknown Browser";
+        }
+
+        console.log("Browser Name: " + browserName);
+
+
+    </script>
+</body>
+
+</html>

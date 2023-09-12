@@ -3,9 +3,22 @@ $cities = [
     "Bagerhat", "Bandarban", "Barguna", "Barisal", "Bhola", "Bogra", "Brahmanbaria", "Chandpur", "Chapainawabganj", "Chhatak", "Chittagong", "Chuadanga", "Comilla", "Cox's Bazar", "Dhaka", "Dinajpur", "Faridpur", "Feni", "Gaibandha", "Gazipur", "Habiganj", "Jamalpur", "Jessore", "Jhalokati", "Jhenaidah", "Joypurhat", "Khagrachari", "Khulna", "Kishoreganj", "Kurigram", "Kushtia", "Lakshmipur", "Lalmonirhat", "Madaripur", "Magura", "Manikganj", "Meherpur", "Moulvibazar", "Munshiganj", "Mymensingh", "Narail", "Narayanganj", "Narsingdi", "Natore", "Nawabganj", "Netrakona", "Nilphamari", "Noakhali", "Pabna", "Panchagarh", "Patuakhali", "Pirojpur", "Rajbari", "Rajshahi", "Rangamati", "Rangpur", "Satkhira", "Shariatpur", "Sherpur", "Sirajganj", "Sunamganj", "Sylhet", "Tangail", "Thakurgaon"
 ];
 
+$genders = ["Male", "Female"];
+$allSkills = ["HTML" => null, "CSS" => null, "JS" => null, "PHP" => null, "MySQL" => null];
+function safuda($data)
+{
+    $data = htmlspecialchars($data);
+    $data = trim($data);
+    $data = stripslashes($data);
+    return $data;
+}
+
 if (isset($_POST["sub123"])) {
-    $name = $_POST["name"];
-    $email = $_POST["email"];
+    $name = safuda($_POST["name"]);
+    $email = safuda($_POST["email"]);
+    $gender = safuda($_POST["gender"] ?? null);
+    $skills = $_POST["skills"] ?? null;
+    $city = safuda($_POST["city"]) ?? null;
 
     if (empty($name)) {
         $errName = "Name is required";
@@ -22,7 +35,34 @@ if (isset($_POST["sub123"])) {
     } else {
         $crrEmail = $email;
     }
+
+    if (empty($gender)) {
+        $errGender = "Please select your gender";
+    } elseif (!in_array($gender, $genders)) {
+        $errGender = "Paknami bondho korun!";
+    } else {
+        $crrGender = $gender;
+    }
+
+    if (empty($skills)) {
+        $errSkills = "Please select your skills";
+    } else {
+        $crrSkills = $skills;
+        foreach ($skills as $skill) {
+            $allSkills[$skill] = "checked";
+        }
+    }
+
+    if (empty($city)) {
+        $errCity = "Please select your city";
+    } elseif (!in_array($city, $cities)) {
+        $errCity = "Paknami bondho korun!";
+    } else {
+        $crrCity = $city;
+    }
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -63,21 +103,25 @@ if (isset($_POST["sub123"])) {
                         </div>
                     </div>
                     <div class="mb-3 border-bottom pb-2">
-                        <!-- bootstrap 5 radio button -->
                         <div class="mb-2">
                             <label for="" class="form-check-label">
                                 Gender :
                             </label>
                         </div>
-                        <div class="form-check-inline">
-                            <label for="" class="form-check-label ">
-                                <input type="radio" class="form-check-input" value="Male" name="gender"> Male
-                            </label>
+                        <div class="<?= isset($errGender) ? 'is-invalid' : null ?>">
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="radio" class="form-check-input" value="Male" name="gender" <?= isset($gender) && $gender === "Male" ? 'checked' : null  ?>> Male
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="radio" class="form-check-input" value="Female" name="gender" <?= isset($gender) && $gender === "Female" ? 'checked' : null  ?>> Female
+                                </label>
+                            </div>
                         </div>
-                        <div class="form-check-inline">
-                            <label for="" class="form-check-label ">
-                                <input type="radio" class="form-check-input" value="Female" name="gender"> Female
-                            </label>
+                        <div class="invalid-feedback">
+                            <?= $errGender ?>
                         </div>
                     </div>
                     <div class="mb-3 border-bottom pb-2">
@@ -86,29 +130,47 @@ if (isset($_POST["sub123"])) {
                                 Skills :
                             </label>
                         </div>
-                        <div class="form-check-inline">
-                            <label for="" class="form-check-label ">
-                                <input type="checkbox" class="form-check-input" value="Male" name="gender"> Male
-                            </label>
+                        <div class="<?= isset($errSkills) ? 'is-invalid' : null ?>">
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="checkbox" class="form-check-input" value="HTML" name="skills[]" <?= $allSkills["HTML"] ?>> HTML
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="checkbox" class="form-check-input" value="CSS" name="skills[]" <?= $allSkills["CSS"] ?>> CSS
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="checkbox" class="form-check-input" value="JS" name="skills[]" <?= $allSkills["JS"] ?>> JS
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="checkbox" class="form-check-input" value="PHP" name="skills[]" <?= $allSkills["PHP"] ?>> PHP
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label for="" class="form-check-label ">
+                                    <input type="checkbox" class="form-check-input" value="MySQL" name="skills[]"> MySQL
+                                </label>
+                            </div>
                         </div>
-                        <div class="form-check-inline">
-                            <label for="" class="form-check-label ">
-                                <input type="checkbox" class="form-check-input" value="Female" name="gender"> Female
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label for="" class="form-check-label ">
-                                <input type="checkbox" class="form-check-input" value="Female" name="gender"> Female
-                            </label>
+                        <div class="invalid-feedback">
+                            <?= $errSkills ?>
                         </div>
                     </div>
                     <div class="border-bottom pb-3">
-                        <select name="" id="" class="form-select ">
+                        <select name="city" id="" class="form-select <?= isset($errCity) ? "is-invalid" : null ?>">
                             <option value="">--Select City--</option>
-                            <?php foreach ($cities as $city) {  ?>
-                                <option value="<?= $city ?>"><?= $city ?></option>
+                            <?php foreach ($cities as $ct) {  ?>
+                                <option value="<?= $ct ?>" <?= $city === $ct ? "selected" : null ?>><?= $ct ?></option>
                             <?php } ?>
                         </select>
+                        <div class="invalid-feedback">
+                            <?= $errCity ?>
+                        </div>
                     </div>
                     <div class="form-floating ">
                         <input type="password" class="form-control border-0 border-bottom rounded-0 shadow-none" placeholder="Password" name="pass">
